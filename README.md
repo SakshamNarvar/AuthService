@@ -1,6 +1,7 @@
 # AuthService - Expense Tracker Authentication Microservice
 
 A secure authentication and authorization service built with Spring Boot for the Expense Tracker application.
+Handles user registration, login, JWT token generation and validation. Built with Spring Boot, Spring Security, and MySQL.
 
 ## Features
 
