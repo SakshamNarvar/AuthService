@@ -39,8 +39,8 @@ public class AuthController {
             return new ResponseEntity<>(JwtResponseDTO.builder().accessToken(jwtToken)
                     .token(refreshToken.getToken()).build(), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>("Exception in User Service", HttpStatus.INTERNAL_SERVER_ERROR);
-
+            ex.printStackTrace();
+            return new ResponseEntity<>("Exception in User Service: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
