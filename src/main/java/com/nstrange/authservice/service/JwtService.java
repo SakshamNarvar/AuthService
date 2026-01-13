@@ -16,7 +16,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    public static final String SECRET = "a21899fe37d3e3c2520087f6908565596a4e43f7ea54b50777ba085788b24a14";
+    public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -62,15 +62,6 @@ public class JwtService {
                 .signWith(getSignKey(), Jwts.SIG.HS256) // Updated signWith signature
                 .compact();
     }
-
-//    private Claims extractAllClaims(String token){
-//        return Jwts
-//                .parser()
-//                .setSigningKey(getSignKey())
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()

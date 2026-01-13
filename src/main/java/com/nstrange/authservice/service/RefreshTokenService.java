@@ -14,9 +14,11 @@ import java.util.UUID;
 @Service
 public class RefreshTokenService {
 
-    @Autowired RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public RefreshToken createRefreshToken(String username) {
         UserInfo userInfoExtracted = userRepository.findByUsername(username);
