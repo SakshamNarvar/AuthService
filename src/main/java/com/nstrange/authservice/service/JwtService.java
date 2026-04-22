@@ -16,7 +16,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
+    public static final String SECRET = "RmlyTmFNaWxlZ2FJc0JoYXJhdEtvTW9kaUphaXNhU2FudA==";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -45,20 +45,12 @@ public class JwtService {
         return createToken(claims, username);
     }
 
-//    private String createToken(Map<String, Object> claims, String username) {
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .setSubject(username)
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60))
-//                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
-//    }
     private String createToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .claims(claims) // "setClaims" is deprecated
                 .subject(username) // "setSubject" is deprecated
                 .issuedAt(new Date(System.currentTimeMillis())) // "setIssuedAt" is deprecated
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60)) // "setExpiration" is deprecated
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) // 1000 (ms) * 60 (s) * 10 (m)
                 .signWith(getSignKey(), Jwts.SIG.HS256) // Updated signWith signature
                 .compact();
     }

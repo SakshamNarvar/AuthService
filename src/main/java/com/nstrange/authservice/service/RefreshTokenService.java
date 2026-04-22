@@ -2,10 +2,12 @@ package com.nstrange.authservice.service;
 
 import com.nstrange.authservice.entities.RefreshToken;
 import com.nstrange.authservice.entities.UserInfo;
+import com.nstrange.authservice.exception.TokenRefreshException;
 import com.nstrange.authservice.repository.RefreshTokenRepository;
 import com.nstrange.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -20,12 +22,16 @@ public class RefreshTokenService {
     @Autowired
     UserRepository userRepository;
 
+    @Transactional
     public RefreshToken createRefreshToken(String username) {
         UserInfo userInfoExtracted = userRepository.findByUsername(username);
+        // Delete any existing refresh token for this user (OneToOne constraint)
+        refreshTokenRepository.deleteByUserInfo(userInfoExtracted);
+        refreshTokenRepository.flush(); // Force DELETE SQL before INSERT to avoid unique constraint violation
         RefreshToken refreshToken = RefreshToken.builder()
                 .userInfo(userInfoExtracted)
                 .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(600000))
+                .expiryDate(Instant.now().plusMillis(1000L * 60 * 60 * 24 * 7)) // 1000 (ms) * 60 (s) * 60 (m) * 24 (h) * 7 (d)
                 .build();
         return refreshTokenRepository.save(refreshToken);
     }
@@ -33,7 +39,8 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) {
         if(token.getExpiryDate().compareTo(Instant.now())<0) {
             refreshTokenRepository.delete(token);
-            throw new RuntimeException(token.getToken() + " Refresh token is expired. Please make a new sign-in request");
+            throw new TokenRefreshException(token.getToken(),
+                    "Refresh token has expired. Please make a new sign-in request");
         }
         return token;
     }

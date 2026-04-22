@@ -3,24 +3,38 @@ package com.nstrange.authservice.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.nstrange.authservice.entities.UserInfo;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserInfoDto extends UserInfo {
+public class UserInfoDto {
 
-    @NonNull
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    @NotBlank(message = "Password hint is required")
+    private String passwordHint;
+
+    @NotBlank(message = "First name is required")
     private String firstName;
 
-    @NonNull
+    //    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    private Long phoneNumber;
-
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be a valid email address")
     private String email;
+
+    @NotNull(message = "Phone number is required")
+    private String phoneNumber;
 }

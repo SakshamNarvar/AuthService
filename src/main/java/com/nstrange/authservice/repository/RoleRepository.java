@@ -1,11 +1,13 @@
 package com.nstrange.authservice.repository;
 
-import com.nstrange.authservice.entities.UserInfo;
+import com.nstrange.authservice.entities.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface UserRepository extends JpaRepository<UserInfo, String> {
-    UserInfo findByUsername(String username);
+public interface RoleRepository extends JpaRepository<UserRole, Long> {
+    Optional<UserRole> findByName(String name);
 }
